@@ -12,6 +12,14 @@ type Product = {
   description: string;
 };
 
+type CartItem = {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  quantity: number;
+};
+
 const fetchProducts = async (): Promise<Product[]> => {
   const res = await fetch("https://fakestoreapi.com/products");
   return res.json();
@@ -26,17 +34,28 @@ const ProductListing = () => {
 
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {data?.map((product) => (
-        <Card key={product.id}>
-          <CardContent>
-            <img src={product.image} alt={product.title} className="h-40 w-full object-cover" />
-            <h2 className="text-lg font-bold">{product.title}</h2>
-            <p className="text-sm text-gray-600">{product.description.substring(0, 100)}...</p>
-            <p className="font-semibold">${product.price}</p>
-            <Button onClick={() => addToCart(product)}>Add to Cart</Button>
-          </CardContent>
-        </Card>
-      ))}
+      {data?.map((product) => {
+        // Convert Product to CartItem
+        const handleAddToCart = () => {
+          const cartItem: CartItem = {
+            ...product,
+            quantity: 1, // Ensure quantity is included
+          };
+          addToCart(cartItem);
+        };
+
+        return (
+          <Card key={product.id}>
+            <CardContent>
+              <img src={product.image} alt={product.title} className="h-40 w-full object-cover" />
+              <h2 className="text-lg font-bold">{product.title}</h2>
+              <p className="text-sm text-gray-600">{product.description.substring(0, 100)}...</p>
+              <p className="font-semibold">${product.price}</p>
+              <Button onClick={handleAddToCart}>Add to Cart</Button>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };
