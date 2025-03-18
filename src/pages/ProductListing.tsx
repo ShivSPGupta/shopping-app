@@ -9,6 +9,7 @@ type Product = {
   title: string;
   price: number;
   image: string;
+  description: string;
 };
 
 const fetchProducts = async (): Promise<Product[]> => {
@@ -30,7 +31,8 @@ const ProductListing = () => {
           <CardContent>
             <img src={product.image} alt={product.title} className="h-40 w-full object-cover" />
             <h2 className="text-lg font-bold">{product.title}</h2>
-            <p>${product.price}</p>
+            <p className="text-sm text-gray-600">{product.description.substring(0, 100)}...</p>
+            <p className="font-semibold">${product.price}</p>
             <Button onClick={() => addToCart(product)}>Add to Cart</Button>
           </CardContent>
         </Card>
